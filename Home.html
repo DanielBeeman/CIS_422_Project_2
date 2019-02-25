@@ -15,7 +15,6 @@ Sources: Input field: https://www.w3schools.com/tags/tag_input.asp
 <h1>My First Heading</h1>
 
 <p>My first paragraph.</p>
-
 <form>
   Parking License Plate: <input type="text" name="fname">
   <select>
@@ -76,5 +75,39 @@ Sources: Input field: https://www.w3schools.com/tags/tag_input.asp
 </form>
 
 </body>
-</html>
+<br></br>
+<body>
+		<!--The div element for the map -->
+		<div id="map" style="height:700px; width:700px"></div>
+		<script>
+	function initMap() {
+	  // The location of Uluru
+	  var centerUS = {lat: 39.8283, lng: -98.5795};
+	  var testMarker = {lat: 44.0521, lng: -123.0868};
 
+	  // The map, centered at Uluru
+	  var map = new google.maps.Map(
+		  document.getElementById('map'), {zoom: 4, center: centerUS});
+	  // The marker, positioned at Uluru
+	  var marker = new google.maps.Marker({position: centerUS, map: map});
+	  //var marker2 = new google.maps.Marker({position: testMarker, map: map});
+	  var marker2 = new google.maps.Marker();
+	  marker2.setMap(map);
+	  var myLatLng = new google.maps.LatLng(44.0521,-123.0868);
+	  marker2.setPosition(myLatLng);
+	  marker2.setTitle("hello world");
+
+	  google.maps.event.addListener(marker , 'click', function(){
+      var infowindow = new google.maps.InfoWindow({
+        content:'Hello Title',
+        position: marker.getPosition(),
+      });
+      infowindow.open(map);
+  });
+	}
+	</script>
+	<script async defer
+		src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBrR-wjiUewpwtVylBDSYL3Hpu5AuKJ4SQ&callback=initMap">
+	</script>
+</body>
+</html>
