@@ -12,9 +12,16 @@ Sources: Input field: https://www.w3schools.com/tags/tag_input.asp
 <html>
 <body>
 
-<h1>My First Heading</h1>
+<<<<<<< HEAD:Home.html
+<h1>Tic Trac</h1>
 
-<p>My first paragraph.</p>
+<p>Enter your license plate and state where the incident occurred to find your ticket.</p>
+=======
+<h1>Welcome to the Parking Ticket Hub</h1>
+
+<p>Please enter your license plate and state below:</p>
+>>>>>>> 91bab6e415752c0a892df85a5df6065e4b15414c:templates/Home.html
+
 <form>
   Parking License Plate: <input type="text" name="fname">
   <select>
@@ -69,45 +76,50 @@ Sources: Input field: https://www.w3schools.com/tags/tag_input.asp
   	<option value="Wisconsin">Wisconsin</option>
   	<option value="Wyoming">Wyoming</option>
 
-
   </select>
-  <input type="submit" formaction ="Ticket_info.html" value="Submit"> 
 </form>
 
-</body>
+<<<<<<< HEAD:Home.html
 <br></br>
-<body>
-		<!--The div element for the map -->
-		<div id="map" style="height:700px; width:700px"></div>
-		<script>
-	function initMap() {
-	  // The location of Uluru
-	  var centerUS = {lat: 39.8283, lng: -98.5795};
-	  var testMarker = {lat: 44.0521, lng: -123.0868};
 
-	  // The map, centered at Uluru
-	  var map = new google.maps.Map(
-		  document.getElementById('map'), {zoom: 4, center: centerUS});
-	  // The marker, positioned at Uluru
-	  var marker = new google.maps.Marker({position: centerUS, map: map});
-	  //var marker2 = new google.maps.Marker({position: testMarker, map: map});
-	  var marker2 = new google.maps.Marker();
-	  marker2.setMap(map);
-	  var myLatLng = new google.maps.LatLng(44.0521,-123.0868);
-	  marker2.setPosition(myLatLng);
-	  marker2.setTitle("hello world");
+<div id="map_canvas" style="height:500px;width:700px"></div>
+<script> 
+  function myMap() {
+  var latLng = new google.maps.LatLng(39.8097343, -98.5556199)
+  var mapProp= {
+    center:latLng,
+    zoom:4,
+  };
+  var map = new google.maps.Map(document.getElementById("map_canvas"), mapProp);
 
-	  google.maps.event.addListener(marker , 'click', function(){
-      var infowindow = new google.maps.InfoWindow({
-        content:'Hello Title',
-        position: marker.getPosition(),
-      });
-      infowindow.open(map);
+  var icon = {
+    scaledSize: new google.maps.Size(100, 100),
+    url: '<img src="cute-fluffy-bunnies-1981-e5df49ebaf25068889da8648e21702b4@1x.jpg">',
+  }
+
+  var marker = new google.maps.Marker({position: latLng, map: map});
+
+  google.maps.event.addListener(marker, 'click', function() {
+    var infowindow = new google.maps.InfoWindow({
+      content: '<img src="cute-fluffy-bunnies-1981-e5df49ebaf25068889da8648e21702b4@1x.jpg" height="50" width="50">',
+      position: marker.getPosition(),
+    });
+    infowindow.open(map);
   });
-	}
-	</script>
-	<script async defer
-		src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBrR-wjiUewpwtVylBDSYL3Hpu5AuKJ4SQ&callback=initMap">
-	</script>
+
+  }
+
+</script>
+
+<script async defer src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBrR-wjiUewpwtVylBDSYL3Hpu5AuKJ4SQ&callback=myMap"
+  type="text/javascript"></script>
+=======
+  <form action="Test.html" method ="post">
+  <input type="submit" value="View Tickets"> 
+  </form>
+
+
+>>>>>>> 91bab6e415752c0a892df85a5df6065e4b15414c:templates/Home.html
 </body>
 </html>
+
