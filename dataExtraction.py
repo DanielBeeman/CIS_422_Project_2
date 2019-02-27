@@ -10,6 +10,7 @@ get_lat_lon, convert_to_degrees, get_float directly from https://gist.github.com
 
 '''
 from PIL import Image, ExifTags
+from subprocess import Popen
 
 def get_exif(image):
 	''' Returns dictionary of string tags and corresponding values '''
@@ -54,10 +55,14 @@ def get_dateTime(exif):
 	return exif["DateTime"]
 
 def main():
-	exif = get_exif('IMG_2376.JPG')
+	# 'IMG_2376.JPG'
+	exif = get_exif('water-22-png.png')
 	#print(exif)
 	lat, lon = get_lat_lon(exif)
-	print("lat: " + str(lat) + " lon: " + str(lon))
-	print(get_dateTime(exif))
+	dateTime = get_dateTime(exif)
+	#print("lat: " + str(lat) + " lon: " + str(lon))
+	#print(get_dateTime(exif))
+	p = Popen(['/usr/bin/php','<php file name>',dateTime],stdout=PIPE)
+	print p.stdout.read()
 
 main()
