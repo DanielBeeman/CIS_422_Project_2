@@ -1,8 +1,9 @@
 <!DOCTYPE html>
-# Authors: Daniel Beeman and Jake Beder. Last Edited 2/26/19. This is the 
-# page that displays information about a ticket, or an error message if
-# there are no tickets to be displayed.  
-
+<!-- 
+Authors: Daniel Beeman and Jake Beder. Last Edited 2/26/19. This is the 
+page that displays information about a ticket, or an error message if
+there are no tickets to be displayed.  
+-->
 
 
 
