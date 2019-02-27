@@ -15,8 +15,21 @@ Sources: Input field: https://www.w3schools.com/tags/tag_input.asp
 
 <p>Please enter your license plate and state below:</p>
 
+
+<!--
+	The code below is surrounded by a form block. This block takes in data and then calls Ticket_db.php,
+	which is a php page that makes calls to our database.
+-->
 <form action="Ticket_db.php" method="post">
+
+<!--
+	The code below takes in a license plate as text that will be used by the php page (Ticket_db.php)
+-->
   Parking License Plate: <input type="text" name="plate">
+ <!--
+ 	The code below creates a dropdown of the 50 US states to select from. When selected, the state will
+ 	be passed to the php page (Ticket_db.php).
+ -->
   <select name="state">
     <option value="Alabama">Alabama</option>
     <option value="Alaska">Alaska</option>
