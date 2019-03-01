@@ -9,10 +9,12 @@ https://www.w3schools.com/php/php_file_upload.asp
 References for limiting file inputs to only be iage files:
 https://stackoverflow.com/questions/1561847/html-how-to-limit-file-upload-to-be-only-images
 -->
-
-
 <!DOCTYPE html>
 <html>
+<head>
+  <title>Admin Page</title>
+  <link rel="stylesheet" type="text/css" href="../static/admin.css">
+</head>
 <body>
 
 <h1>Welcome to the Parking Ticket Hub</h1>
@@ -24,15 +26,19 @@ https://stackoverflow.com/questions/1561847/html-how-to-limit-file-upload-to-be-
 	The code below is surrounded by a form block. This block takes in data and then calls Ticket_db.php,
 	which is a php page that makes calls to our database.
 -->
-<form > <!--action="Ticket_db.php" method="post"-->
+
+<div id="main">
+  <form > <!--action="Ticket_db.php" method="post"-->
 
 <!--
-	The code below takes in a license plate as text that will be used by the php page (Ticket_db.php)
+  The code below takes in a license plate as text that will be used by the php page (Ticket_db.php)
 -->
   License Plate: <input type="text" name="plate">
+  ID: <input type="text" name="id">
+  <br>
  <!--
- 	The code below creates a dropdown of the 50 US states to select from. When selected, the state will
- 	be passed to the php page (Ticket_db.php).
+  The code below creates a dropdown of the 50 US states to select from. When selected, the state will
+  be passed to the php page (Ticket_db.php).
  -->
   Plate's state: <select name="Plate's state">
     <option value="Alabama">Alabama</option>
@@ -86,38 +92,21 @@ https://stackoverflow.com/questions/1561847/html-how-to-limit-file-upload-to-be-
     <option value="Wisconsin">Wisconsin</option>
     <option value="Wyoming">Wyoming</option>
 
-  </select>
-  <br />
+    </select>
+    <br />
 
-  <!-- This is the input that will allow the user to upload an image from their local machine onchange="img_check()" image/*,
-    The accept attribute limits the files the user can select from we will set this to only accept JPEG-->
-  Image Evidence: <input type="file" name="upload image" accept=".jpg" id="image">
-  <!-- This will need a helper function to ensure that the file selected was of the correct type -->
-  <br />
+    <!-- This is the input that will allow the user to upload an image from their local machine onchange="img_check()" image/*,
+      The accept attribute limits the files the user can select from we will set this to only accept JPEG-->
+    Image Evidence: <input type="file" name="upload image" accept=".jpeg, .jpg" id="image">
+    <!-- This will need a helper function to ensure that the file selected was of the correct type -->
+    <br />
 
-  <!-- This is a textbox for describing why the ticket was given -->
-  Violation Descrption: <input type="text" name="description">
+    <!-- This is a textbox for describing why the ticket was given -->
+    Violation Description: <textarea class="textarea" name="description"> </textarea>
 
   <input type="submit" value="View Tickets"> 
-</form>
-<!--  The javascript would be used to verify whether or not the uploaded file is the correct type I don't
-  know if this is needed given the accept attribute
-<script type="text/javascript">
-  function img_check(){
-    alert("in function");
-    var img_type = document.getElementById("image");
-    console.log(img_type);
-    var result = img_type.type();
-    console.log(result);
-    if(result){
-      alert("Acceptable image type for our system");
-    }
-    else{
-      alert("Only JPEG images are acceptible");
-      document.getElementById("image").value()="";
-    }
-  }
-</script> -->
+  </form>
+</div>
 
 <br />
 

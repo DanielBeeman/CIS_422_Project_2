@@ -1,0 +1,10 @@
+h1, p {
+	color: red;
+	text-align: center;
+}
+
+#main {
+	margin: 0 auto;
+  	max-width: 433px;
+  	height: 100px;
+ }
