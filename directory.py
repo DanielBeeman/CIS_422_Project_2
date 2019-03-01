@@ -24,6 +24,10 @@ def index():
     app.logger.debug("Main page entry")
     return flask.render_template('Home.html')                           #Renders the main page for the website
 
+@app.rout("/admin")
+def admin():
+    pass
+
 #############
 
 app.debug = True
