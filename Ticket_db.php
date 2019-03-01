@@ -1,10 +1,9 @@
 <!DOCTYPE html>
-<!-- 
+<!--
 Authors: Daniel Beeman and Jake Beder. Last Edited 2/26/19. This is the 
 page that displays information about a ticket, or an error message if
 there are no tickets to be displayed.  
 -->
-
 
 
 
@@ -15,6 +14,7 @@ $user = "guest";
 $pass = "guest";
 $dbname = "Parking_Ticket";
 $port = "3728";
+
 
 # Open database connection
 $conn = mysqli_connect($server, $user, $pass, $dbname, $port) or die('Error connecting to MySQL server.');
@@ -48,16 +48,26 @@ $rowcount = mysqli_num_rows($result);
 # If there are no rows returned, we print the error page
 $check = 0;
 if ($rowcount > 0){
-	$check = 1;
+        $check = 1;
 }
 if($check ==0){
-	echo "Error: No tickets have been found";
+        echo "Error: No tickets have been found";
 }
+
+$im = imagecreatefrompng();
 
 # This prints out information about tickets for a given license plate
 while ($event1 = mysqli_fetch_array($result, MYSQLI_BOTH)){
-		
-	print "Ticket number: $event1[idTickets], State: $event1[State], License Plate: $event1[License_Plate]";
+        print "Ticket number: $event1[idTickets], State: $event1[State], License Plate: $event1[License_Plate]";
+        echo "<br>";
+        #header('Content-type: image/jpeg');
+        echo '
+            <tr>
+                <td>
+                    <img src="data:image/jpeg;base64,'.base64_encode($event1['Picture']).'"/>
+                </td>
+            </tr>
+        ';
 }
 
 print"</pre>";
@@ -66,6 +76,3 @@ print"</pre>";
 mysqli_free_result($result);
 mysqli_close($conn);
 ?>
-
-</body>
-</html>
