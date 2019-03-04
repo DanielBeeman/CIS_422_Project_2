@@ -4,13 +4,16 @@ Convert image into EXIF data, then grab lat+lng
 There's a datetime included = 'DateTime' and 'DateTimeOriginal'
 This might help tell the difference: https://mail.gnome.org/archives/f-spot-list/2005-August/msg00081.html
 
-Getting tags based on https://stackoverflow.com/questions/4764932/in-python-how-do-i-read-the-exif-data-for-an-image
+Getting exif tags based on https://stackoverflow.com/questions/4764932/in-python-how-do-i-read-the-exif-data-for-an-image
 
 get_lat_lon, convert_to_degrees, get_float directly from https://gist.github.com/erans/983821/e30bd051e1b1ae3cb07650f24184aa15c0037ce8
 
 '''
+# For .jpg
 from PIL import Image, ExifTags
-from subprocess import Popen
+
+# For PHP
+#from subprocess import Popen
 
 def get_exif(image):
 	''' Returns dictionary of string tags and corresponding values '''
@@ -55,14 +58,12 @@ def get_dateTime(exif):
 	return exif["DateTime"]
 
 def main():
-	# 'IMG_2376.JPG'
-	exif = get_exif('water-22-png.png')
-	#print(exif)
-	lat, lon = get_lat_lon(exif)
-	dateTime = get_dateTime(exif)
-	#print("lat: " + str(lat) + " lon: " + str(lon))
-	#print(get_dateTime(exif))
-	p = Popen(['/usr/bin/php','<php file name>',dateTime],stdout=PIPE)
-	print p.stdout.read()
+    exif = get_exif('IMG_2376.JPG')
+    lat, lon = get_lat_lon(exif)
+    dateTime = get_dateTime(exif)
+    print("lat: " + str(lat) + " lon: " + str(lon))
+    print(get_dateTime(exif))
+	#p = Popen(['/usr/bin/php','<php file name>',dateTime],stdout=PIPE)
+	#print p.stdout.read()
 
 main()
