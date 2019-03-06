@@ -1,4 +1,5 @@
 Flask
+Pillow
 nose
 pep8
 autopep8

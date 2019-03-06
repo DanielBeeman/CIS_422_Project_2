@@ -28,7 +28,7 @@ https://stackoverflow.com/questions/1561847/html-how-to-limit-file-upload-to-be-
 -->
 
 <div id="main">
-  <form > <!--action="Ticket_db.php" method="post"-->
+  <form action='/admin_data' method="POST" enctype="multipart/form-data"> <!--action="Ticket_db.php" method="post"-->
 
 <!--
   The code below takes in a license plate as text that will be used by the php page (Ticket_db.php)
@@ -40,7 +40,7 @@ https://stackoverflow.com/questions/1561847/html-how-to-limit-file-upload-to-be-
   The code below creates a dropdown of the 50 US states to select from. When selected, the state will
   be passed to the php page (Ticket_db.php).
  -->
-  Plate's state: <select name="Plate's state">
+  Plate's state: <select name="state">
     <option value="Alabama">Alabama</option>
     <option value="Alaska">Alaska</option>
     <option value="Arizona">Arizona</option>
@@ -97,14 +97,14 @@ https://stackoverflow.com/questions/1561847/html-how-to-limit-file-upload-to-be-
 
     <!-- This is the input that will allow the user to upload an image from their local machine onchange="img_check()" image/*,
       The accept attribute limits the files the user can select from we will set this to only accept JPEG-->
-    Image Evidence: <input type="file" name="upload image" accept=".jpeg, .jpg" id="image">
+    Image Evidence: <input type="file" name="upload" accept=".jpeg, .jpg" id="image">
     <!-- This will need a helper function to ensure that the file selected was of the correct type -->
     <br />
 
     <!-- This is a textbox for describing why the ticket was given -->
     Violation Description: <textarea class="textarea" name="description"> </textarea>
 
-  <input type="submit" value="View Tickets"> 
+  <input type="submit" value="Submit"> 
   </form>
 </div>
 

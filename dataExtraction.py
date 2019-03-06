@@ -32,6 +32,7 @@ def convert_to_degrees(value):
 def get_lat_lon(exif):
     try:
     	info = exif["GPSInfo"]
+        
 
         gps_latitude = info[2] # 3 tuples
         gps_latitude_ref = info[1] # N or S
