@@ -4,15 +4,23 @@ Url and method handler page
 """
 
 import flask
-from flask import request
+from flask import Flask, request, redirect, url_for
+import mysql.connector
 # import dataExtraction
 import logging
 from PIL import Image, ExifTags
+from io import BytesIO
+
 
 ###
 # Globals
 ###
-app = flask.Flask(__name__)
+app = Flask(__name__)
+
+ 
+# MySQL configurations
+cnx = mysql.connector.connect(port = 3728, host = "ix.cs.uoregon.edu", user = "guest", password = "guest", database = "Parking_Ticket")
+cursor = cnx.cursor()
 
 
 ###
@@ -28,20 +36,63 @@ def index():
 
 @app.route('/admin_data', methods=['GET', 'POST'])
 def admin_data():
-	plate = request.form['plate']
-	ticketId = request.form['id']
-	state = request.form['state']
 	image = request.files['upload']
-	description = request.form['description']
+	image1 = request.files['upload'].read()
 	exif = get_exif(image)
 	lat, lon = get_lat_lon(exif)
-	app.logger.debug("lat: " + str(lat) + " lon: " + str(lon))
-	app.logger.debug(get_dateTime(exif))
+	ticket_info = {
+		'plate' : request.form['plate'],
+		'ticketId' : request.form['id'],
+		'state' : request.form['state'],
+		'image' : image1,
+		'description' : request.form['description'],
+		'lat' : lat,
+		'lon': lon,
+		'days': 1,
+
+	}
+	# ticket_info = {
+	# 	'plate' : 1,
+	# 	'ticketId' : 1,
+	# 	'state' : 'ca',
+	# 	'image' : 'asdf',
+	# 	'description' : 'asdf',
+	# 	'lat' : 1,
+	# 	'lon': 1,
+	# 	'days': 1,
+
+	# }
+	
+
+	# insert into db
+
+	# "INSERT into Tickets (idTickets, State, License_Plate, Picture, Latitude, Longitude, Timestamp, Days_Left, Description) 
+	# VALUES ('$id', '$state', '$plate', '$image', NULL, NULL, NULL, NULL, '$descr')"
 
 
-	app.logger.debug(ticketId)
-	app.logger.debug(state)
-	return "hello"
+	add_ticket = ("INSERT into Tickets " "(idTickets, State, License_Plate, Picture, Latitude, Longitude, Days_Left, Description) "
+		"VALUES (%(ticketId)s, %(state)s, %(plate)s, %(image)s, %(lat)s, %(lon)s, %(days)s, %(description)s) ")
+		# "VALUES (%(ticketId)s, %(state)s, %(plate)s, %(image)s, %(lat)s, %(lon)s, %(time)s, %(days)s, %(description)s) ")
+		# "VALUES ('$id', '$state', '$plate', '$image', NULL, NULL, NULL, NULL, '$descr') ")
+
+	cursor.execute(add_ticket, ticket_info)
+	cnx.commit()
+
+	# cursor.close()
+	# cnx.close()
+
+
+
+
+
+
+	# app.logger.debug("lat: " + str(lat) + " lon: " + str(lon))
+	# app.logger.debug(get_dateTime(exif))
+
+
+	# app.logger.debug(ticketId)
+	# app.logger.debug(state)
+	return redirect(url_for("admin"))
 
 @app.route("/admin")
 def admin():
