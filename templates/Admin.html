@@ -9,38 +9,39 @@ https://www.w3schools.com/php/php_file_upload.asp
 References for limiting file inputs to only be iage files:
 https://stackoverflow.com/questions/1561847/html-how-to-limit-file-upload-to-be-only-images
 -->
-<!DOCTYPE html>
+<!DOCTYPE html> <!--Create HTML Document -->
 <html>
 <head>
   <title>Admin Page</title>
-  <link rel="stylesheet" type="text/css" href="../static/admin.css">
+  <link rel="stylesheet" type="text/css" href="../static/admin.css"> <!--Link to admin.css-->
 </head>
 <body>
 
-<h1>Welcome to the Parking Ticket Hub</h1>
+<h1>Welcome to the Parking Ticket Hub</h1> <!--Main Header Element-->
 
 <p>Please enter violation data below:</p>
 
 
 <!--
-	The code below is surrounded by a form block. This block takes in data and then calls Ticket_db.php,
-	which is a php page that makes calls to our database.
+	The code below is surrounded by a form block. This block takes in data and then sends the data to directory.py,
+	which is a python page that sends data to our database.
 -->
 
-<div id="main">
-  <form action='/admin_data' method="POST" enctype="multipart/form-data"> <!--action="Ticket_db.php" method="post"-->
+<div id="main"> <!--Main Div-->
+  <form action='/admin_data' method="POST" enctype="multipart/form-data">  <!--Form to send data to admin_data handler on directory.py-->
 
 <!--
-  The code below takes in a license plate as text that will be used by the php page (Ticket_db.php)
+  The code below takes in a license plate, ID, License Plate State, Image of the Violation, and Violation Description 
 -->
-  License Plate: <input type="text" name="plate">
-  ID: <input type="text" name="id">
+  License Plate: <input type="text" name="plate" maxlength="7" required> <!--Get License Plate Number-->
+  ID: <input type="text" name="id" pattern = "[0-9]{0-11}" title="You can only enter 11 digits" required> <!--Get Ticket ID-->
+  <!-- " -->
   <br>
  <!--
-  The code below creates a dropdown of the 50 US states to select from. When selected, the state will
-  be passed to the php page (Ticket_db.php).
+  The code below creates a dropdown of the 50 US states to select from with a select an option as the default
  -->
-  Plate's state: <select name="state">
+  Plate's state: <select name="state" required>
+    <option disabled selected value> - select an option - </option>
     <option value="Alabama">Alabama</option>
     <option value="Alaska">Alaska</option>
     <option value="Arizona">Arizona</option>
@@ -96,21 +97,27 @@ https://stackoverflow.com/questions/1561847/html-how-to-limit-file-upload-to-be-
     <br />
 
     <!-- This is the input that will allow the user to upload an image from their local machine onchange="img_check()" image/*,
-      The accept attribute limits the files the user can select from we will set this to only accept JPEG-->
-    Image Evidence: <input type="file" name="upload" accept=".jpeg, .jpg" id="image">
-    <!-- This will need a helper function to ensure that the file selected was of the correct type -->
+      The accept attribute limits the files the user can select from we will set this to accept JPEG and JPG-->
+    Image Evidence: <input type="file" name="upload" accept=".jpeg, .jpg" id="image" required>
     <br />
 
     <!-- This is a textbox for describing why the ticket was given -->
-    Violation Description: <textarea class="textarea" name="description"> </textarea>
+    Violation Description: <textarea class="textarea" name="description" maxlength=1000 required></textarea>
 
-  <input type="submit" value="Submit"> 
+  <input type="submit" value="Submit"> <!--Submit button-->
   </form>
 </div>
 
 <br />
 
-
+<!-- This is to format the error messages sent fro directory.py if the submission to the database fails. -->
+{% with messages = get_flashed_messages() %}
+  {% if messages %}
+    {% for message in messages %}
+      <p id="error">{{ message }}</p>
+    {% endfor %}
+  {% endif %}
+{% endwith %}
 
 </body>
-</html>
+</html> <!---End html document->

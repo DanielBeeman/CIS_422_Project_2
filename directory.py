@@ -1,26 +1,30 @@
 """
 Url and method handler page
+Contributers: Newton Blair (2/25/19), Bryce Di Geronimo (2/25/19)
+This will be our main python file that will be responsible for handling URL requests, rendering HTML templates, setting up the localhost environment, 
+and sending data to the database.
 
 """
-
+# import all flask dependencies
 import flask
-from flask import Flask, request, redirect, url_for
+from flask import Flask, flash, request, redirect, url_for, jsonify
 import mysql.connector
-# import dataExtraction
 import logging
 from PIL import Image, ExifTags
 from io import BytesIO
+import arrow
+
 
 
 ###
 # Globals
 ###
-app = Flask(__name__)
-
+app = Flask(__name__) #central object
+app.secret_key = 'secretKey' #need an arbitrary key for flask messages
  
 # MySQL configurations
-cnx = mysql.connector.connect(port = 3728, host = "ix.cs.uoregon.edu", user = "guest", password = "guest", database = "Parking_Ticket")
-cursor = cnx.cursor()
+cnx = mysql.connector.connect(port = 3728, host = "ix.cs.uoregon.edu", user = "guest", password = "guest", database = "Parking_Ticket") #develop connection with external database
+cursor = cnx.cursor() #create cursor
 
 
 ###
@@ -28,75 +32,61 @@ cursor = cnx.cursor()
 ###
 
 
-@app.route("/")
-@app.route("/index")
-def index():
-    app.logger.debug("Main page entry")
-    return flask.render_template('Home.html')                           #Renders the main page for the website
+@app.route("/") #home page
+@app.route("/index") #different url for same home page
+def index(): #function name
+    # app.logger.debug("Main page entry") 
+    return flask.render_template('Home.html') #Renders the main page for the website
 
-@app.route('/admin_data', methods=['GET', 'POST'])
+@app.route('/admin_data', methods=['GET', 'POST']) #main form for admin page, accepts GET and POST Requests
 def admin_data():
-	image = request.files['upload']
-	image1 = request.files['upload'].read()
-	exif = get_exif(image)
-	lat, lon = get_lat_lon(exif)
-	ticket_info = {
+	image = request.files['upload'] #get raw image
+	image1 = request.files['upload'].read() #get image bytes
+	exif = get_exif(image) #dictionary of string tags and corresponding values
+	time = get_dateTime(exif) #get time of when picture was taken
+	time1 = time.split(" ")
+	first = time1[0].replace(':', '-')
+	newstring = first + " " + time1[1]
+	arrowObject = arrow.get(newstring)
+	final = arrowObject.shift(days=+10)
+	dateTime = final.format('YYYY-MM-DD HH:mm:ss')
+	app.logger.debug(str(dateTime))
+	lat, lon = get_lat_lon(exif) #get lattitude and longitude of picture
+
+	try: #create dictionary of all values received from form with matching entries of database
+		ticket_info = {
 		'plate' : request.form['plate'],
-		'ticketId' : request.form['id'],
+		'ticketId' : int(request.form['id']),
 		'state' : request.form['state'],
 		'image' : image1,
 		'description' : request.form['description'],
 		'lat' : lat,
 		'lon': lon,
-		'days': 1,
+		'time': time,
+		'days': dateTime,
+		}
 
-	}
-	# ticket_info = {
-	# 	'plate' : 1,
-	# 	'ticketId' : 1,
-	# 	'state' : 'ca',
-	# 	'image' : 'asdf',
-	# 	'description' : 'asdf',
-	# 	'lat' : 1,
-	# 	'lon': 1,
-	# 	'days': 1,
+		#create an object with relevant data corresponding to database entries to be sent the the database
+		add_ticket = ("INSERT into Tickets " "(idTickets, State, License_Plate, Picture, Latitude, Longitude, Description, Timestamp, End_Date) "
+			"VALUES (%(ticketId)s, %(state)s, %(plate)s, %(image)s, %(lat)s, %(lon)s, %(description)s, %(time)s, %(days)s) ") 
 
-	# }
-	
+		cursor.execute(add_ticket, ticket_info) #commit data to database
+		cnx.commit() #commit connection
+		return redirect(url_for("admin")) #redirect to admin page
 
-	# insert into db
-
-	# "INSERT into Tickets (idTickets, State, License_Plate, Picture, Latitude, Longitude, Timestamp, Days_Left, Description) 
-	# VALUES ('$id', '$state', '$plate', '$image', NULL, NULL, NULL, NULL, '$descr')"
-
-
-	add_ticket = ("INSERT into Tickets " "(idTickets, State, License_Plate, Picture, Latitude, Longitude, Days_Left, Description) "
-		"VALUES (%(ticketId)s, %(state)s, %(plate)s, %(image)s, %(lat)s, %(lon)s, %(days)s, %(description)s) ")
-		# "VALUES (%(ticketId)s, %(state)s, %(plate)s, %(image)s, %(lat)s, %(lon)s, %(time)s, %(days)s, %(description)s) ")
-		# "VALUES ('$id', '$state', '$plate', '$image', NULL, NULL, NULL, NULL, '$descr') ")
-
-	cursor.execute(add_ticket, ticket_info)
-	cnx.commit()
+	except mysql.connector.Error as err: #if sending to database doesn't work
+		app.logger.debug(err)
+		flash("Error: Could not successfully insert data") #add error to flash messages to be displayed if submission to database doesnt work
+		flash("Please verify that the ID is unique") #add error to flash messages to be displayed if submission to database doesnt work
+		return redirect(url_for("admin")) #redirect to admin page
 
 	# cursor.close()
 	# cnx.close()
-
-
-
-
-
-
-	# app.logger.debug("lat: " + str(lat) + " lon: " + str(lon))
-	# app.logger.debug(get_dateTime(exif))
-
-
-	# app.logger.debug(ticketId)
-	# app.logger.debug(state)
-	return redirect(url_for("admin"))
+	
 
 @app.route("/admin")
 def admin():
-	return flask.render_template('Admin.html')
+	return flask.render_template('Admin.html') # render admin page
 
 '''
 Convert image into EXIF data, then grab lat+lng
@@ -121,15 +111,16 @@ def get_exif(image):
 	}
 	return exif
 
-get_float = lambda x: float(x[0]) / float(x[1])
+get_float = lambda x: float(x[0]) / float(x[1]) 
 
+#convert lat and long format to degrees
 def convert_to_degrees(value):
     d = get_float(value[0])
     m = get_float(value[1])
     s = get_float(value[2])
     return d + (m / 60.0) + (s / 3600.0)
 
-
+#get lattitude and longitude from image
 def get_lat_lon(exif):
 	try:
 		info = exif["GPSInfo"]
@@ -151,27 +142,17 @@ def get_lat_lon(exif):
 	except KeyError:
 		return None
 
-
+#gets the data and the time of when the picture was taken
 def get_dateTime(exif):
 	return exif["DateTime"]
-
-# def main():
-# 	exif = get_exif('IMG_2376.JPG')
-# 	#print(exif)
-# 	lat, lon = get_lat_lon(exif)
-# 	print("lat: " + str(lat) + " lon: " + str(lon))
-# 	print(get_dateTime(exif))
-
-# main()
-
 
 
 #############
 
-app.debug = True
+app.debug = True #allow us to see changes live on our environment
 if app.debug:
     app.logger.setLevel(logging.DEBUG)
 
 if __name__ == "__main__":
-    print("Opening for global access on port {}".format(5000))
-    app.run(port=5000, host="0.0.0.0")
+    print("Opening for global access on port {}".format(5000)) #let the user know which port the application is being run on
+    app.run(port=5000, host="0.0.0.0") #set the port = 5000 and run the application on local host
