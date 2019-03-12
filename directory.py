@@ -43,6 +43,8 @@ def admin_data():
 	image = request.files['upload'] #get raw image
 	image1 = request.files['upload'].read() #get image bytes
 	exif = get_exif(image) #dictionary of string tags and corresponding values
+	app.logger.debug("***************")
+	app.logger.debug(exif['Orientation'])
 	time = get_dateTime(exif) #get time of when picture was taken
 	time1 = time.split(" ")
 	first = time1[0].replace(':', '-')
@@ -72,12 +74,13 @@ def admin_data():
 
 		cursor.execute(add_ticket, ticket_info) #commit data to database
 		cnx.commit() #commit connection
+		flash("Successful database insertion", 'color')
 		return redirect(url_for("admin")) #redirect to admin page
 
 	except mysql.connector.Error as err: #if sending to database doesn't work
 		app.logger.debug(err)
-		flash("Error: Could not successfully insert data") #add error to flash messages to be displayed if submission to database doesnt work
-		flash("Please verify that the ID is unique") #add error to flash messages to be displayed if submission to database doesnt work
+		flash("Error: Could not successfully insert data", 'error') #add error to flash messages to be displayed if submission to database doesnt work
+		flash("Please verify that the ID is unique", 'error') #add error to flash messages to be displayed if submission to database doesnt work
 		return redirect(url_for("admin")) #redirect to admin page
 
 	# cursor.close()
