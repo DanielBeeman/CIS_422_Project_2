@@ -1,6 +1,8 @@
 Flask
 Pillow
 mysql-connector
+arrow
+pytest
 nose
 pep8
 autopep8
