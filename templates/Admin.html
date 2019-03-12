@@ -111,10 +111,18 @@ https://stackoverflow.com/questions/1561847/html-how-to-limit-file-upload-to-be-
 <br />
 
 <!-- This is to format the error messages sent fro directory.py if the submission to the database fails. -->
-{% with messages = get_flashed_messages() %}
+{% with messages = get_flashed_messages(category_filter=["color"]) %}
+{% if messages %}
+    {% for message in messages %}
+      <p class="align" id="success">{{ message }}</p>
+    {% endfor %}
+  {% endif %}
+{% endwith %}
+
+{% with messages = get_flashed_messages(category_filter=["error"]) %}
   {% if messages %}
     {% for message in messages %}
-      <p id="error">{{ message }}</p>
+      <p class="align" id="error">{{ message }}</p>
     {% endfor %}
   {% endif %}
 {% endwith %}
