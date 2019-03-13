@@ -10,15 +10,16 @@ Sources: Input field: https://www.w3schools.com/tags/tag_input.asp
 
 <!DOCTYPE html>
 <html>
-<body>
+<body style='background:linear-gradient(to bottom right, #33ccff 0%, #6600ff 100%);height:800px'>
+        <center>
+<h1 style='font-family:futura'> Welcome to the Parking Ticket Hub</h1>
 
-<h1>Welcome to the Parking Ticket Hub</h1>
+<p style='font-family:futura'> Please enter your license plate and state below:</p>
 
-<p>Please enter your license plate and state below:</p>
-
-<form action="Ticket_db.php" method="post">
-  Parking License Plate: <input type="text" name="plate">
-  <select name="state">
+<form action="Ticket_db.php" method="post" style='font-family:futura'>
+  Parking License Plate: <input type="text" name="plate" maxlength="7" required>
+  <select name="state" required>
+        <option disabled selected value> - select an option - </option>
         <option value="Alabama">Alabama</option>
         <option value="Alaska">Alaska</option>
         <option value="Arizona">Arizona</option>
@@ -74,43 +75,7 @@ Sources: Input field: https://www.w3schools.com/tags/tag_input.asp
 
   <input type="submit" value="View Tickets">
 </form>
-
-<br></br>
-
-<div id="map_canvas" style="height:500px;width:700px"></div>
-<script>
-  function myMap() {
-  var latLng = new google.maps.LatLng(39.8097343, -98.5556199)
-  var mapProp= {
-    center:latLng,
-    zoom:4,
-  };
-  var map = new google.maps.Map(document.getElementById("map_canvas"), mapProp);
-
-  var icon = {
-    scaledSize: new google.maps.Size(100, 100),
-    url: '<img src="cute-fluffy-bunnies-1981-e5df49ebaf25068889da8648e21702b4@1x.jpg">',
-  }
-
-  var marker = new google.maps.Marker({position: latLng, map: map});
-
-  google.maps.event.addListener(marker, 'click', function() {
-    var infowindow = new google.maps.InfoWindow({
-      content: '<img src="cute-fluffy-bunnies-1981-e5df49ebaf25068889da8648e21702b4@1x.jpg" height="50" width="50">',
-      position: marker.getPosition(),
-    });
-    infowindow.open(map);
-  });
-
-  }
-
-</script>
-
-<script async defer src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBrR-wjiUewpwtVylBDSYL3Hpu5AuKJ4SQ&callback=myMap"
-  type="text/javascript"></script>
-
-
+        </center>
 </body>
 </html>
-
 
