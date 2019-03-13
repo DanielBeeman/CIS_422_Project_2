@@ -25,12 +25,13 @@ Sources: Input field: https://www.w3schools.com/tags/tag_input.asp
 <!--
 	The code below takes in a license plate as text that will be used by the php page (Ticket_db.php)
 -->
-  Parking License Plate: <input type="text" name="plate">
+  Parking License Plate: <input type="text" name="plate" maxlength="7" required>
  <!--
  	The code below creates a dropdown of the 50 US states to select from. When selected, the state will
  	be passed to the php page (Ticket_db.php).
  -->
-  <select name="state">
+  <select name="state" required>
+    <option disabled selected value> - select an option - </option>
     <option value="Alabama">Alabama</option>
     <option value="Alaska">Alaska</option>
     <option value="Arizona">Arizona</option>

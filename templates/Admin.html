@@ -34,7 +34,8 @@ https://stackoverflow.com/questions/1561847/html-how-to-limit-file-upload-to-be-
   The code below takes in a license plate, ID, License Plate State, Image of the Violation, and Violation Description 
 -->
   License Plate: <input type="text" name="plate" maxlength="7" required> <!--Get License Plate Number-->
-  ID: <input type="text" name="id" pattern = "[0-9]{0-11}" title="You can only enter 11 digits" required> <!--Get Ticket ID-->
+  ID: <input type="text" name="id" pattern = "[0-9]{0,11}" title="You can only enter 11 digits" required> <!--Get Ticket ID-->
+  <!-- ID: <input type="number" name="id" min="1" max = "99999999999"  title="You can only enter 11 digits" required> <!--Get Ticket ID--> 
   <!-- " -->
   <br>
  <!--
