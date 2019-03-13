@@ -5,9 +5,9 @@ This system is made for people who give parking tickets, to collect ticket data 
 ## User Documentation
 This document outlines a step-by-step process for getting our application up and running on your local machine with an Internet connection.
 
-##Initial Setup
+## Initial Setup
 
-###Forking Repository
+### Forking Repository
 
 1. Please visit our Github at https://github.com/DanielBeeman/CIS_422_Project_2/. Once you have either signed in or created a Git account, please fork our repository by clicking the Fork button in the top right corner. 
 
@@ -27,7 +27,7 @@ You now have a copy of the repository on your Desktop.
 
 
 
-###Documentation for installing the database and setting up IX
+### Documentation for installing the database and setting up IX
 * Ensure you are connected to internet.
 * Open the application titled ‘Terminal’.
 * Connect to your ix account using your login credentials. This can be done using the following command: “ssh example@ix.cs.uoregon.edu”, where ‘example’ is your ix username. 
@@ -54,7 +54,7 @@ You now have a copy of the repository on your Desktop.
 * Please log out of your ix account first.
 
 
-###Setting up the Virtual Environment
+### Setting up the Virtual Environment
 
 
 1. While in the terminal, check the version of python that you are running by typing in the command: python3 --version
@@ -83,7 +83,7 @@ Python3.7 -m venv venv
 10. Now your virtual environment is set up. To install all the requirements, please run the command:  pip3 install -r requirements.txt
 
 11. You are now ready to test out the system. 
-###Running The Application
+### Running The Application
 
 1. With the virtual environment running, to run the program, please type the command: 
 python3 directory.py
@@ -108,6 +108,6 @@ Update the username, password, database, and port near the top of the file to ma
 * Next, select “View Tickets” to see if your new entry appears on the page and map. If so, you are done setting up the system! 
 
 
-###Continuous Use
+### Continuous Use
 Once the setup is finished, you can just go to http://0.0.0.0:5000/admin to submit tickets and http://ix.cs.uoregon.edu/~example/Home.html where example is your IX username to view your tickets.
 
