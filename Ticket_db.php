@@ -65,7 +65,7 @@ while ($event1 = mysqli_fetch_array($result, MYSQLI_BOTH)){
         $tempEvent['Latitude'] = $event1['Latitude'];
         $tempEvent['Longitude'] = $event1['Longitude'];
         # Combine event data and encoded image into array and add to array of tickets
-        $ticket_array[$i] = array($tempEvent, $tempIm);//changed from tempIm
+        $ticket_array[$i] = array($tempEvent, $tempIm); //changed from tempIm
         $i++;
 }
 // Printing 'ticket' vs. 'tickets' based on number of tickets
@@ -87,7 +87,6 @@ mysqli_close($conn);
 ?>
 <center><div id="map_canvas" style='height:800px;margin-right:100px;margin-left:100px;'></div></center>
 <script type="text/javascript">
-// From https://stackoverflow.com/questions/7489742/php-read-exif-data-and-adjust-orientation
 
 function myMap() {
   // Create map centered on the geographical center of the USA
