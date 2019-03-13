@@ -13,7 +13,6 @@ import logging
 from PIL import Image, ExifTags
 import io 
 import arrow
-# import BytesIO
 
 
 
@@ -32,13 +31,14 @@ cursor = cnx.cursor() #create cursor
 # Pages
 ###
 
-
+# Transgressors' home page
 @app.route("/") #home page
 @app.route("/index") #different url for same home page
 def index(): #function name
     # app.logger.debug("Main page entry") 
     return flask.render_template('Home.html') #Renders the main page for the website
 
+# Occurs upon submitting Admin form
 @app.route('/admin_data', methods=['GET', 'POST']) #main form for admin page, accepts GET and POST Requests
 def admin_data():
 	image = request.files['upload'] #get raw image
@@ -46,12 +46,16 @@ def admin_data():
 	if('GPSInfo' not in exif):
 		flash("Please enter an image with GPS data", 'error')
 		return redirect(url_for("admin")) #redirect to admin page
+	# If image is rotated abnormally, rotate to correct position
 	if exif['Orientation'] != 1:
 		image=Image.open(request.files['upload'])
+		# Image is upside down
 		if exif['Orientation'] == 3:
 			image=image.rotate(180)
+		# Image is rotated to the left
 		elif exif['Orientation'] == 6:
 			image=image.rotate(270)
+		# Image is rotated to the right
 		elif exif['Orientation'] == 8:
 			image=image.rotate(90)
 		image.show()
@@ -59,11 +63,13 @@ def admin_data():
 		image.save(stream, "JPEG")
 		imagebytes = stream.getvalue()
 		image1= imagebytes
+	# Image is already correctly rotated
 	else:
 		image1 = image.read()
 
 	app.logger.debug("***************")
 	app.logger.debug(exif['Orientation'])
+	# Create datetime object
 	time = get_dateTime(exif) #get time of when picture was taken
 	time1 = time.split(" ")
 	first = time1[0].replace(':', '-')
@@ -72,6 +78,7 @@ def admin_data():
 	final = arrowObject.shift(days=+10)
 	dateTime = final.format('YYYY-MM-DD HH:mm:ss')
 	app.logger.debug(str(dateTime))
+	# Get latitude and longitude 
 	lat, lon = get_lat_lon(exif) #get lattitude and longitude of picture
 
 	try: #create dictionary of all values received from form with matching entries of database
@@ -102,10 +109,8 @@ def admin_data():
 		flash("Please verify that the ID is unique", 'error') #add error to flash messages to be displayed if submission to database doesnt work
 		return redirect(url_for("admin")) #redirect to admin page
 
-	# cursor.close()
-	# cnx.close()
 	
-
+# Ticketers' home page
 @app.route("/admin")
 def admin():
 	return flask.render_template('Admin.html') # render admin page
@@ -132,29 +137,31 @@ def get_exif(image):
 	    if k in ExifTags.TAGS
 	}
 	return exif
-
+# Convert a tuple of two numbers to a float
 get_float = lambda x: float(x[0]) / float(x[1]) 
 
-#convert lat and long format to degrees
+# Convert lat and long format to degrees
 def convert_to_degrees(value):
     d = get_float(value[0])
     m = get_float(value[1])
     s = get_float(value[2])
     return d + (m / 60.0) + (s / 3600.0)
 
-#get lattitude and longitude from image
+# Get lattitude and longitude from image
 def get_lat_lon(exif):
 	try:
 		info = exif["GPSInfo"]
-		gps_latitude = info[2]
+		gps_latitude = info[2] # 3 tuples
 		gps_latitude_ref = info[1] # N or S
 		gps_longitude = info[4] # 3 tuples
-		gps_longitude_ref = info[3]
-
+		gps_longitude_ref = info[3] # E or W
+		
+		# Correct latitude if in Northern hemisphere
 		lat = convert_to_degrees(gps_latitude)
 		if gps_latitude_ref != "N":
 			lat *= -1
 
+		# Correct longitude if in Eastern hemisphere
 		lon = convert_to_degrees(gps_longitude)
 		if gps_longitude_ref != "E":
 			lon *= -1
@@ -164,7 +171,7 @@ def get_lat_lon(exif):
 	except KeyError:
 		return None
 
-#gets the data and the time of when the picture was taken
+# Gets the data and the time of when the picture was taken
 def get_dateTime(exif):
 	return exif["DateTime"]
 
