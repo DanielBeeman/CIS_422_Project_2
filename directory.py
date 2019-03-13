@@ -11,8 +11,9 @@ from flask import Flask, flash, request, redirect, url_for, jsonify
 import mysql.connector
 import logging
 from PIL import Image, ExifTags
-from io import BytesIO
+import io 
 import arrow
+# import BytesIO
 
 
 
@@ -41,8 +42,26 @@ def index(): #function name
 @app.route('/admin_data', methods=['GET', 'POST']) #main form for admin page, accepts GET and POST Requests
 def admin_data():
 	image = request.files['upload'] #get raw image
-	image1 = request.files['upload'].read() #get image bytes
 	exif = get_exif(image) #dictionary of string tags and corresponding values
+	if('GPSInfo' not in exif):
+		flash("Please enter an image with GPS data", 'error')
+		return redirect(url_for("admin")) #redirect to admin page
+	if exif['Orientation'] != 1:
+		image=Image.open(request.files['upload'])
+		if exif['Orientation'] == 3:
+			image=image.rotate(180)
+		elif exif['Orientation'] == 6:
+			image=image.rotate(270)
+		elif exif['Orientation'] == 8:
+			image=image.rotate(90)
+		image.show()
+		stream = io.BytesIO()
+		image.save(stream, "JPEG")
+		imagebytes = stream.getvalue()
+		image1= imagebytes
+	else:
+		image1 = image.read()
+
 	app.logger.debug("***************")
 	app.logger.debug(exif['Orientation'])
 	time = get_dateTime(exif) #get time of when picture was taken
