@@ -63,12 +63,12 @@ def admin_data():
 		image.save(stream, "JPEG")
 		imagebytes = stream.getvalue()
 		image1= imagebytes
-<<<<<<< HEAD
-=======
+
+
 	# Image is already correctly rotated
 	else:
 		image1 = image.read()
->>>>>>> f0cdd428c0b94d2c1bae6ba155b542d3406debbd
+
 
 	app.logger.debug("***************")
 	app.logger.debug(exif['Orientation'])
