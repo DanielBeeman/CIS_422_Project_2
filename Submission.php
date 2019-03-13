@@ -1,10 +1,11 @@
 <!--
-This will be the home page for the parking company. They will use it to upload the violation ticket data, i.e. the longitude, latitude, timestamp, a description of the violation, and the photograph evidence of the violation, to the database
+This will be the home page for the parking company. They will use it to upload the violation ticket data, i.e. the longitude, 
+latitude, timestamp, a description of the violation, and the photograph evidence of the violation, to the database
 
 Sources: Input field: https://www.w3schools.com/tags/tag_input.asp
 https://www.w3schools.com/php/php_file_upload.asp
 
-References for limiting file inputs to only be iage files:
+References for limiting file inputs to only be image files:
 https://stackoverflow.com/questions/1561847/html-how-to-limit-file-upload-to-be-only-images
 -->
 
@@ -32,7 +33,6 @@ https://stackoverflow.com/questions/1561847/html-how-to-limit-file-upload-to-be-
 
         $image = addslashes(file_get_contents($_FILES['upload_image']['tmp_name'])); //SQL Injection defence!
         echo strlen($image);
-        //$image_name = addslashes($_FILES['upload_image']['name']);
 
         $insert = "INSERT into Tickets (idTickets, State, License_Plate, Picture, Latitude, Longitude, Timestamp, Days_Left, Description) VALUES ('$id', '$state', '$plate', '$image', NULL, NULL, NULL, NULL, '$descr')";
 
@@ -141,24 +141,6 @@ https://stackoverflow.com/questions/1561847/html-how-to-limit-file-upload-to-be-
 
   <input type="submit" name="upload"  value="Add to Database">
 </form>
-<!--  The javascript would be used to verify whether or not the uploaded file is the correct type I don't
-  know if this is needed given the accept attribute
-<script type="text/javascript">
-  function img_check(){
-    alert("in function");
-    var img_type = document.getElementById("image");
-    console.log(img_type);
-    var result = img_type.type();
-    console.log(result);
-    if(result){
-      alert("Acceptable image type for our system");
-    }
-    else{
-      alert("Only JPEG images are acceptible");
-      document.getElementById("image").value()="";
-    }
-  }
-</script> -->
 
 <br/>
 
