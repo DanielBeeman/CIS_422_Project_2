@@ -1,5 +1,14 @@
+body {
+	background:linear-gradient(to bottom right, #33ccff 0%, #6600ff 100%);
+	height:800px;
+}
+
+* {
+ font-family:futura;
+}
+
+
 h1, p {
-	color: blue;
 	text-align: center;
 }
 
