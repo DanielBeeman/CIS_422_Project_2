@@ -31,12 +31,6 @@ cursor = cnx.cursor() #create cursor
 # Pages
 ###
 
-# Transgressors' home page
-@app.route("/") #home page
-@app.route("/index") #different url for same home page
-def index(): #function name
-    # app.logger.debug("Main page entry") 
-    return flask.render_template('Home.html') #Renders the main page for the website
 
 # Occurs upon submitting Admin form
 @app.route('/admin_data', methods=['GET', 'POST']) #main form for admin page, accepts GET and POST Requests
@@ -64,14 +58,6 @@ def admin_data():
 		imagebytes = stream.getvalue()
 		image1= imagebytes
 
-
-	# Image is already correctly rotated
-	else:
-		image1 = image.read()
-
-
-	app.logger.debug("***************")
-	app.logger.debug(exif['Orientation'])
 	# Create datetime object
 	time = get_dateTime(exif) #get time of when picture was taken
 	time1 = time.split(" ")
@@ -114,6 +100,7 @@ def admin_data():
 
 	
 # Ticketers' home page
+@app.route("/") 
 @app.route("/admin")
 def admin():
 	return flask.render_template('Admin.html') # render admin page
